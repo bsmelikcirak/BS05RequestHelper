@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Melik Çırak</Authors>
+    <Description>BSRequestHelper is a .NET library designed to simplify sending API requests and handling responses with ease. It is specifically built to streamline HTTP requests and eliminate repetitive code.</Description>
+    <PackageProjectUrl>https://github.com/bsmelikcirak/BS05RequestHelper/tree/master</PackageProjectUrl>
+    <Version>1.0.3</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/bsmelikcirak/BS05RequestHelper/tree/master</RepositoryUrl>
+    <PackageReleaseNotes>Delete and Put methods added</PackageReleaseNotes>
+    <Copyright>MIT License</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="RestSharp" Version="111.4.1" />
+  </ItemGroup>
+
+</Project>

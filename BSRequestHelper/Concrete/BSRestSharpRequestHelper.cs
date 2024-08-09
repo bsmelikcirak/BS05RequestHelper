@@ -37,6 +37,35 @@ namespace BSRequestHelper.Concrete
             var response = await _restClient.ExecuteAsync<T>(request);
             return HandleResponse<T>(response);
         }
+
+        public async Task<T> PutAsync<T>(string url, object data, Dictionary<string, string> headers = null)
+        {
+            SetHeaders(headers);
+            var request = new RestRequest(url, Method.Put);
+            request.AddJsonBody(data);
+
+            var response = await _restClient.ExecuteAsync<T>(request);
+            return HandleResponse<T>(response);
+        }
+
+        public async Task<T> DeleteAsync<T>(string url, Dictionary<string, string> headers = null)
+        {
+            SetHeaders(headers);
+            var request = new RestRequest(url, Method.Delete);
+
+            var response = await _restClient.ExecuteAsync<T>(request);
+            return HandleResponse<T>(response);
+        }
+
+        public async Task<T> DeleteAsync<T>(string url, object queryParams, Dictionary<string, string> headers = null)
+        {
+            string queryString = QueryStringBuilder.QueryStringFromObject(queryParams);
+            string fullUrl = $"{url}?{queryString}";
+            return await DeleteAsync<T>(fullUrl, headers);
+        }
+
+
+
         private void SetHeaders(Dictionary<string, string> headers)
         {
             if (headers != null)
