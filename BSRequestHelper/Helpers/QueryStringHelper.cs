@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace BSRequestHelper.Helpers
 {
@@ -54,5 +57,25 @@ namespace BSRequestHelper.Helpers
 
             return queryString.ToString();
         }
+        public static string CreateSoapEnvelope<T>(T requestObj)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(T));
+
+            using (var stringWriter = new StringWriter())
+            {
+                using (var xmlWriter = XmlWriter.Create(stringWriter))
+                {
+                    xmlSerializer.Serialize(xmlWriter, requestObj);
+                    string xmlBody = stringWriter.ToString();
+                    return $@"<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' xmlns:web='http://www.example.com/webservice'>
+                        <soapenv:Header/>
+                        <soapenv:Body>
+                            {xmlBody}
+                        </soapenv:Body>
+                      </soapenv:Envelope>";
+                }
+            }
+        }
+
     }
 }

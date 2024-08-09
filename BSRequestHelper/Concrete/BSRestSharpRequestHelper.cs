@@ -5,6 +5,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace BSRequestHelper.Concrete
 {
@@ -63,6 +64,23 @@ namespace BSRequestHelper.Concrete
             string fullUrl = $"{url}?{queryString}";
             return await DeleteAsync<T>(fullUrl, headers);
         }
+        public async Task<T> PostSoapAsync<T>(string url, string soapAction, string soapEnvelope, Dictionary<string, string> headers = null)
+        {
+            SetHeaders(headers);
+
+            var request = new RestRequest(url, Method.Post);
+            request.AddHeader("Content-Type", "text/xml;charset=UTF-8");
+            request.AddHeader("SOAPAction", soapAction);
+            request.AddParameter("text/xml", soapEnvelope, ParameterType.RequestBody);
+
+            var response = await _restClient.ExecuteAsync(request);
+            return HandleSoapResponse<T>(response);
+        }
+        public async Task<TResponse> PostSoapAsync<TRequest, TResponse>(string url, string soapAction, TRequest requestObj, Dictionary<string, string> headers = null)
+        {
+            string soapEnvelope = QueryStringBuilder.CreateSoapEnvelope(requestObj);
+            return await PostSoapAsync<TResponse>(url, soapAction, soapEnvelope, headers);
+        }
 
 
 
@@ -82,6 +100,21 @@ namespace BSRequestHelper.Concrete
             if (response.IsSuccessStatusCode)
             {
                 return JsonConvert.DeserializeObject<T>(response.Content);
+            }
+            else
+            {
+                throw new Exception(response.Content);
+            }
+        }
+        private T HandleSoapResponse<T>(RestResponse response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(response.Content);
+
+                string jsonText = JsonConvert.SerializeXmlNode(xmlDoc);
+                return JsonConvert.DeserializeObject<T>(jsonText);
             }
             else
             {
