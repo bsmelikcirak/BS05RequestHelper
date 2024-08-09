@@ -1,6 +1,6 @@
-# BS05RequestHelper
+# BSRequestHelper
 
-BS05RequestHelper is a .NET library designed to simplify sending API requests and handling responses with ease. It is specifically built to streamline HTTP requests and eliminate repetitive code.
+BSRequestHelper is a .NET library designed to simplify sending API requests and handling responses with ease. It is specifically built to streamline HTTP requests and eliminate repetitive code.
 
 Note: Currently, it only supports RestSharp, but HttpClient support will be added in future updates.
 
