@@ -6,18 +6,18 @@ Note: Currently, it only supports RestSharp, but HttpClient support will be adde
 
 ## Features
 - Simple and intuitive API.
-- Supports GET, POST HTTP requests.
-- Automatic serialization/deserialization of JSON format.
+- Supports GET, POST, PUT, DELETE HTTP requests.
+- Automatic serialization/deserialization of JSON and XML formats.
 - Automatic error handling after HTTP requests.
 - Ability to send asynchronous requests.
-- Upcoming: HttpClient and PUT,DELETE support.
+- Upcoming: HttpClient support.
 
 ## Installation
 
 You can add the package to your project via NuGet:
 
 ```bash
-dotnet add package BS05RequestHelper
+dotnet add package BSRequestHelper
 ```
 
 ## Usage
