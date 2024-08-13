@@ -1,9 +1,11 @@
 ﻿using BSRequestHelper.Abstract;
 using BSRequestHelper.Helpers;
+using BSRequestHelper.Models;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -36,7 +38,7 @@ namespace BSRequestHelper.Concrete
             request.AddJsonBody(data);
 
             var response = await _restClient.ExecuteAsync<T>(request);
-            return HandleResponse<T>(response);
+            return HandleResponse<T>(response, JsonConvert.SerializeObject(data));
         }
 
         public async Task<T> PutAsync<T>(string url, object data, Dictionary<string, string> headers = null)
@@ -46,7 +48,7 @@ namespace BSRequestHelper.Concrete
             request.AddJsonBody(data);
 
             var response = await _restClient.ExecuteAsync<T>(request);
-            return HandleResponse<T>(response);
+            return HandleResponse<T>(response, JsonConvert.SerializeObject(data));
         }
 
         public async Task<T> DeleteAsync<T>(string url, Dictionary<string, string> headers = null)
@@ -81,9 +83,6 @@ namespace BSRequestHelper.Concrete
             string soapEnvelope = QueryStringBuilder.CreateSoapEnvelope(requestObj);
             return await PostSoapAsync<TResponse>(url, soapAction, soapEnvelope, headers);
         }
-
-
-
         private void SetHeaders(Dictionary<string, string> headers)
         {
             if (headers != null)
@@ -95,7 +94,7 @@ namespace BSRequestHelper.Concrete
             }
         }
 
-        private T HandleResponse<T>(RestResponse response)
+        private T HandleResponse<T>(RestResponse response, string requestBody = "")
         {
             if (response.IsSuccessStatusCode)
             {
@@ -103,7 +102,14 @@ namespace BSRequestHelper.Concrete
             }
             else
             {
-                throw new Exception(response.Content);
+                var errorDetail = new BSRequestErrorDetail
+                {
+                    Url = response.ResponseUri.ToString(),
+                    RequestBody = requestBody,
+                    Headers = response.Headers.Select(h => $"{h.Name}: {h.Value}").ToList(),
+                    ResponseContent = response.Content
+                };
+                throw new Exception(JsonConvert.SerializeObject(errorDetail));
             }
         }
         private T HandleSoapResponse<T>(RestResponse response)

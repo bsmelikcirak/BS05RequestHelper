@@ -6,10 +6,10 @@
     <Authors>Melik Çırak</Authors>
     <Description>BSRequestHelper is a .NET library designed to simplify sending API requests and handling responses with ease. It is specifically built to streamline HTTP requests and eliminate repetitive code.</Description>
     <PackageProjectUrl>https://github.com/bsmelikcirak/BS05RequestHelper/tree/master</PackageProjectUrl>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/bsmelikcirak/BS05RequestHelper/tree/master</RepositoryUrl>
-    <PackageReleaseNotes>XML support added</PackageReleaseNotes>
+    <PackageReleaseNotes>More details added to error detail</PackageReleaseNotes>
     <Copyright>MIT License</Copyright>
   </PropertyGroup>
 
