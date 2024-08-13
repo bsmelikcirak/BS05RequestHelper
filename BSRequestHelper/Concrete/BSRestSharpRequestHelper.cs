@@ -87,6 +87,15 @@ namespace BSRequestHelper.Concrete
         {
             if (headers != null)
             {
+                var existingHeaders = _restClient.DefaultParameters
+                                    .Where(p => p.Type == ParameterType.HttpHeader)
+                                    .ToList();
+
+                foreach (var header in existingHeaders)
+                {
+                    _restClient.DefaultParameters.RemoveParameter(header.Name,ParameterType.HttpHeader);
+                }
+
                 foreach (var header in headers)
                 {
                     _restClient.AddDefaultHeader(header.Key, header.Value);
